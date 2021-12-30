@@ -1,7 +1,7 @@
 <template>
   <div class="country__card">
     <div class="country__image">
-      <router-link :to="{name: 'CountryDetail', params: {countryname: countryInfo.name, country: countryInfo}}">
+      <router-link :to="{name: 'CountryDetail', params: {countryname: countryInfo.name}}">
           <img :src="countryInfo.flags.png" :alt="countryInfo.name + ' flag'" loading="lazy"/>
       </router-link>
     </div>

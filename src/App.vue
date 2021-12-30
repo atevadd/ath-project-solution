@@ -34,5 +34,6 @@ export default{
 
 body{
   background-color: $mode-bg;
+  overflow-x: hidden;
 }
 </style>

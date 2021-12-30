@@ -1,16 +1,11 @@
 <template>
-  <button @click="goBack">
+  <button>
     <slot></slot>
   </button>
 </template>
 
 <script>
 export default {
-  name: "BaseButton",
-  methods: {
-    goBack() {
-      history.back();
-    },
-  },
+  name: "BaseButton"
 };
 </script>

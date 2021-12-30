@@ -16,7 +16,7 @@ export default {
 <style lang="scss" scoped>
 header {
   background-color: $white;
-  box-shadow: 0 3px 13px rgba($color: #000000, $alpha: 0.15);
+  box-shadow: 0 3px 13px rgba($color: #000000, $alpha: 0.1);
 
   @include mobile {
     position: relative;
