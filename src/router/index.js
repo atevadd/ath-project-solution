@@ -3,6 +3,7 @@ import CountryListing from '../views/CountryListing.vue';
 import CountryDetail from '../views/CountryDetail.vue';
 import Signup from "../views/Signup.vue";
 import Login from "../views/Login.vue";
+import ForgotPassword from "../views/ForgotPassword.vue";
 
 const routes = [
   {
@@ -44,6 +45,15 @@ const routes = [
     props: true,
     meta:{
       title: "Where in the world - Login",
+    }
+  },
+  {
+    path: "/forgot-password",
+    name: 'ForgotPassword',
+    component: () => import(/* webpackChunkName: "ForgotPassword" */ '../views/ForgotPassword.vue'),
+    props: true,
+    meta:{
+      title: "Reet your password",
     }
   }
 ]

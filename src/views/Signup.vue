@@ -20,7 +20,16 @@
           <input type="text" id="country" required />
           <label for="country">country</label>
         </BaseInputField>
-        <BaseButton :class="[isLoading ? 'loading' : '', 'signup__btn']"> Signup </BaseButton>
+        <BaseButton :class="[isLoading ? 'loading' : '', 'signup__btn']">
+          Signup
+        </BaseButton>
+
+        <p class="signup__alt-text">
+          Already have an account?
+          <router-link :to="{ name: 'Login' }" class="login-link"
+            >Login</router-link
+          >
+        </p>
       </form>
     </section>
   </main>
@@ -36,11 +45,11 @@ export default {
     BaseInputField,
     BaseButton,
   },
-  data(){
-      return{
-          isLoading: false,
-      }
-  }
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
 };
 </script>
 
@@ -75,7 +84,7 @@ export default {
       display: none;
     }
     @include tablet {
-     display: none;
+      display: none;
     }
     @include laptop {
       display: flex;
@@ -233,22 +242,22 @@ export default {
         cursor: pointer;
         overflow: hidden;
         // box-shadow: -10px 10px 0px rgba($color: $mode-text, $alpha: .3);
-        transition: outline-offset .1s ease;
+        transition: outline-offset 0.1s ease;
 
-        &:hover{
-            box-shadow: none;
-            outline: 2px dashed $mode-text;
-            outline-offset: 4px;
+        &:hover {
+          box-shadow: none;
+          outline: 2px dashed $mode-text;
+          outline-offset: 4px;
         }
-        &:focus{
-            box-shadow: none;
-            outline: 2px dashed $mode-text;
-            outline-offset: 4px;
+        &:focus {
+          box-shadow: none;
+          outline: 2px dashed $mode-text;
+          outline-offset: 4px;
         }
-        &:active{
-            box-shadow: none;
-            outline: 2px dashed $mode-text;
-            outline-offset: 4px;
+        &:active {
+          box-shadow: none;
+          outline: 2px dashed $mode-text;
+          outline-offset: 4px;
         }
 
         &.loading {
@@ -274,6 +283,31 @@ export default {
               );
             z-index: -1;
             animation: loading 1s infinite linear;
+          }
+        }
+      }
+
+      .signup__alt-text {
+        text-align: center;
+        margin-top: 20px;
+
+        @include mobile {
+          font-size: 0.75rem;
+        }
+        @include tablet {
+          font-size: 0.85rem;
+        }
+        @include laptop {
+          font-size: 0.95rem;
+        }
+
+        .login-link {
+          color: $mode-text;
+          text-decoration: none;
+          font-weight: 600;
+
+          &:hover {
+            text-decoration: underline;
           }
         }
       }
