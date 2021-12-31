@@ -1,4 +1,5 @@
 <template>
+  <BaseNavbar />
   <main class="country">
     <!-- Button component -->
     <BaseButton class="country__back-btn" @click="goBack">
@@ -10,6 +11,7 @@
         <img
           :src="countryDetail.flags.png"
           :alt="countryDetail.name + ' flag'"
+          loading="lazy"
         />
       </section>
       <section class="country__info">
@@ -70,12 +72,14 @@
 </template>
 
 <script>
+import BaseNavbar from "@/components/BaseNavbar.vue";
 import BaseButton from "../components/BaseButton.vue";
 import axios from "axios";
 
 export default {
   name: "CountryDetail",
   components: {
+    BaseNavbar,
     BaseButton,
   },
   data() {
@@ -183,18 +187,19 @@ export default {
     @include mobile {
       display: grid;
       grid-template-columns: repeat(1, minmax(0, 1fr));
-      margin: 30px 0;
-    //   border: 1px solid red;
+      margin: 60px 0;
+      //   border: 1px solid red;
     }
     @include tablet {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      margin: 60px 0;
     }
     @include laptop {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       margin: 60px 0;
-      column-gap: 50px;
+      column-gap: 100px;
     }
 
     .country__flag {
@@ -229,10 +234,10 @@ export default {
         }
         @include tablet {
           font-size: 1.2rem;
-          margin: 20px 0;
+          margin: 28px 0 15px;
         }
         @include laptop {
-          font-size: 1.6rem;
+          font-size: 1.7rem;
           margin-bottom: 20px;
           font-weight: 800;
         }
@@ -247,8 +252,8 @@ export default {
           align-items: flex-start;
         }
         @include tablet {
-          align-items: center;
-          justify-content: space-between;
+          flex-direction: column;
+          align-items: flex-start;
         }
         @include laptop {
           align-items: flex-start;
@@ -259,8 +264,11 @@ export default {
         .country__text {
           position: relative;
 
-          @include mobile{
-              margin-bottom: 20px;
+          @include mobile {
+            margin-bottom: 20px;
+          }
+          @include tablet {
+            margin-bottom: 20px;
           }
 
           p {
@@ -270,6 +278,7 @@ export default {
             }
             @include tablet {
               font-size: 0.8rem;
+              margin: 5px 0;
             }
             @include laptop {
               font-size: 0.9rem;
@@ -298,19 +307,19 @@ export default {
     .country__border {
       position: relative;
 
-      @include mobile{
-          margin-bottom: 20px;
+      @include mobile {
+        margin-bottom: 20px;
       }
 
       .bold {
-        @include mobile{
-            font-size: 0.79rem;
+        @include mobile {
+          font-size: 0.79rem;
         }
-        @include tablet{
-            font-size: 0.85rem;
+        @include tablet {
+          font-size: 0.85rem;
         }
-        @include laptop{
-            font-size: 0.9rem;
+        @include laptop {
+          font-size: 0.9rem;
         }
       }
 

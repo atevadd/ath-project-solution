@@ -1,4 +1,5 @@
 <template>
+<BaseNavbar />
   <main>
     <section class="filter-region">
       <BaseSearchbar
@@ -14,6 +15,7 @@
         v-for="(country, index) in countries"
         :key="index"
         :countryInfo="country"
+        @search-text="search"
       />
     </section>
     <section class="loading" v-else>
@@ -24,6 +26,7 @@
 </template>
 
 <script>
+import BaseNavbar from "@/components/BaseNavbar.vue";
 import BaseSearchbar from "@/components/BaseSearchbar.vue";
 import BaseFilter from "@/components/BaseFilter.vue";
 import CountryCard from "../components/CountryCard.vue";
@@ -32,6 +35,7 @@ import axios from "axios";
 export default {
   name: "CountryListing",
   components: {
+        BaseNavbar,
     BaseSearchbar,
     BaseFilter,
     CountryCard,
@@ -42,7 +46,7 @@ export default {
     };
   },
   methods:{
-    printDetails(data){
+    search(data){
       console.log(data)
     }
   },
@@ -50,9 +54,7 @@ export default {
     axios
       .get("https://restcountries.com/v2/all")
       .then((response) => {
-        console.log(response.data);
         this.countries = response.data;
-        console.log(this.countries);
       })
       .catch((error) => {
         console.log(error);
@@ -156,7 +158,7 @@ main {
     }
     @include tablet {
       width: 90%;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 30px;
     }
     @include laptop {

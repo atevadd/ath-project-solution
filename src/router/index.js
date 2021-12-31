@@ -1,14 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import CountryListing from '../views/CountryListing.vue';
 import CountryDetail from '../views/CountryDetail.vue';
+import Signup from "../views/Signup.vue";
+import Login from "../views/Login.vue";
 
 const routes = [
   {
     path: '/',
-    name: 'CountryListing',
-    component: CountryListing,
+    name: 'Signup',
+    component: Signup,
     meta:{
-      title: "Country Listings",
+      title: "Where in the world - Signup",
     }
   },
   {
@@ -17,10 +19,31 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/CountryDetail.vue'),
+    component: () => import(/* webpackChunkName: "CountryDetail" */ '../views/CountryDetail.vue'),
     props: true,
     meta:{
-      title: "A country",
+      title: "where in the world - A country",
+    }
+  },
+  {
+    path: '/countrylist',
+    name: 'CountryListing',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "CountryListing" */ '../views/CountryListing.vue'),
+    props: true,
+    meta:{
+      title: "Where in the world - country list",
+    }
+  },
+  {
+    path: "/login",
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "Login" */ '../views/Login.vue'),
+    props: true,
+    meta:{
+      title: "Where in the world - Login",
     }
   }
 ]

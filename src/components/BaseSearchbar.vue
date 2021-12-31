@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="search" :placeholder="placeholderText" />
+    <input type="search" :placeholder="placeholderText" v-model="searchText" @keyup="search(searchText)"/>
     <span><i class="bx bx-search-alt-2"></i></span>
   </div>
 </template>
@@ -14,6 +14,16 @@ export default {
       default: "Search",
     },
   },
+  data(){
+    return{
+      searchText: "",
+    }
+  },
+  methods:{
+    search(data){
+      this.$emit('searchtext', data)
+    }
+  }
 };
 </script>
 
