@@ -1,62 +1,91 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import CountryListing from '../views/CountryListing.vue';
-import CountryDetail from '../views/CountryDetail.vue';
+// import CountryListing from '../views/CountryListing.vue';
+// import CountryDetail from '../views/CountryDetail.vue';
 import Signup from "../views/Signup.vue";
-import Login from "../views/Login.vue";
-import ForgotPassword from "../views/ForgotPassword.vue";
+// import Login from "../views/Login.vue";
+// import ForgotPassword from "../views/ForgotPassword.vue";
+// import SetPassword from "../views/SetPassword.vue";
+// // import SetPassword from "../views/SetPassword.vue";
 
 const routes = [
   {
-    path: '/',
-    name: 'Signup',
+    path: "/",
+    name: "Signup",
     component: Signup,
-    meta:{
+    meta: {
       title: "Where in the world - Signup",
-    }
+    },
   },
   {
-    path: '/country/:countryname',
-    name: 'CountryDetail',
+    path: "/country/:countryname",
+    name: "CountryDetail",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "CountryDetail" */ '../views/CountryDetail.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "CountryDetail" */ "../views/CountryDetail.vue"
+      ),
     props: true,
-    meta:{
+    meta: {
       title: "where in the world - A country",
-    }
+    },
   },
   {
-    path: '/countrylist',
-    name: 'CountryListing',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "CountryListing" */ '../views/CountryListing.vue'),
+    path: "/countrylist",
+    name: "CountryListing",
+
+    component: () =>
+      import(
+        /* webpackChunkName: "CountryListing" */ "../views/CountryListing.vue"
+      ),
     props: true,
-    meta:{
+    meta: {
       title: "Where in the world - country list",
-    }
+    },
   },
   {
     path: "/login",
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "Login" */ '../views/Login.vue'),
+    name: "Login",
+    component: () =>
+      import(/* webpackChunkName: "Login" */ "../views/Login.vue"),
     props: true,
-    meta:{
+    meta: {
       title: "Where in the world - Login",
-    }
+    },
   },
   {
     path: "/forgot-password",
-    name: 'ForgotPassword',
-    component: () => import(/* webpackChunkName: "ForgotPassword" */ '../views/ForgotPassword.vue'),
+    name: "ForgotPassword",
+    component: () =>
+      import(
+        /* webpackChunkName: "ForgotPassword" */ "../views/ForgotPassword.vue"
+      ),
     props: true,
-    meta:{
-      title: "Reet your password",
-    }
-  }
-]
+    meta: {
+      title: "Where in the world - Reset your password",
+    },
+  },
+  {
+    path: "/password",
+    name: "SetPassword",
+    component: () =>
+      import(/* webpackChunkName: "SetPassword" */ "../views/SetPassword.vue"),
+    props: true,
+    meta: {
+      title: "Where in the world - create your password",
+    },
+  },
+  {
+    path: "/new-password",
+    name: "NewPassword",
+    component: () =>
+      import(/* webpackChunkName: "NewPassword" */ "../views/NewPassword.vue"),
+      meta:{
+        title: "Where in the world - New password"
+      }
+  },
+];
 
 
 

@@ -1,67 +1,84 @@
 <template>
-  <!-- Response element after code has been sent -->
-  <main class="sent" v-if="isSent">
-    <h1>Password reset code sent</h1>
-  </main>
+  <main class="password">
+    <h1>Create your password</h1>
+    <form
+      class="password__form"
+      @submit.prevent="setPassword"
+      autocomplete="off"
+    >
 
-  <!-- The password reset form -->
-  <main class="reset" v-else>
-    <h1>Forget password?</h1>
-    <p>Enter your email to reset your password</p>
-
-    <form class="reset__form" @submit.prevent="resetPassword">
-        <div class="message" v-show="errorMessage">{{ errorMessage }}</div>
+    <div class="message" v-show="errorMessage">
+        {{ errorMessage }}
+    </div>
       <BaseInputField class="input-box">
         <input
-          type="email"
-          id="email"
+          type="password"
+          id="passsword"
+          v-model="userPassword.password"
+          inputmode="text"
           required
-          autocomplete="email"
-          inputmode="email"
-          v-model="resetDetails.email"
+          autocomplete="new-password"
         />
-        <label for="email">Email</label>
+        <label for="password">Your passsword</label>
+        <span class="password__toggle" @click="togglePassword"
+          ><i class="bx bx-hide"></i
+        ></span>
       </BaseInputField>
       <BaseButton
-        :class="['reset__btn', isLoading ? 'loading' : '']"
+        :class="[isLoading ? 'loading' : '', 'password__btn']"
         type="submit"
-        >Reset password</BaseButton
+        >Set password</BaseButton
       >
     </form>
   </main>
 </template>
 
 <script>
-import BaseButton from "../components/BaseButton.vue";
 import BaseInputField from "../components/BaseInputField.vue";
+import BaseButton from "../components/BaseButton.vue";
 import axios from "axios";
 
 export default {
-  name: "ForgotPassword",
-  components: { BaseButton, BaseInputField },
+  name: "SetPassword",
+  components: {
+    BaseInputField,
+    BaseButton,
+  },
   data() {
     return {
       isLoading: false,
-      isSent: false,
       errorMessage: null,
-      resetDetails: {
-        email: "",
+      userPassword: {
+        password: "",
       },
     };
   },
   methods: {
-    resetPassword() {
-      console.log(this.resetDetails);
+    togglePassword(e) {
+      let passwordField =
+        e.target.parentElement.previousElementSibling.previousElementSibling;
+      let icon = e.target;
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.className = "bx bxs-hide";
+      } else {
+        passwordField.type = "password";
+        icon.className = "bx bxs-show";
+      }
+    },
+    setPassword() {
+      console.log(this.userPassword);
 
       this.isLoading = true;
 
       let config = {
         method: "POST",
-        url: "https://dev.pay4me.app/api/v2/auth/forgot-password",
+        url: "https://dev.pay4me.app/api/v2/auth/set-password",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${sessionStorage.getItem("api_token")}`,
         },
-        data: JSON.stringify(this.resetDetails),
+        data: JSON.stringify(this.userPassword),
       };
 
       axios(config)
@@ -69,22 +86,24 @@ export default {
           console.log(response);
           this.isLoading = false;
 
-          if (response.data.status === 200 || response.data.success === true) {
-            this.isSent = true;
-            setTimeout(() => {
-              this.$router.push({
-                name: "NewPassword",
-              });
-            }, 2000);
+          if (response.status === 204) {
+            this.$router.push({
+              name: "Login",
+              params: {
+                message: "Account created successfully",
+              },
+            });
           }
         })
-        .catch((error) => {
-          this.errorMessage = 'This email does not exist';
+        .catch((err) => {
+          console.log(err.response.data);
           this.isLoading = false;
+          this.errorMessage = 'Password must be at least 8 characters'
+        //   this.errorMessage = err.response.data.error.fields.password[0]
 
-          setTimeout(()=>{
-              this.errorMessage = null;
-          }, 4000)
+          setTimeout(() =>{
+              this.errorMessage = null
+          }, 3000)
         });
     },
   },
@@ -92,67 +111,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sent {
-  position: relative;
+.password {
   width: 100%;
-  animation: reveal 0.2s ease;
 
   h1 {
     text-align: center;
     margin: 20px 0;
-    font-weight: 600;
+    padding: 0 20px;
 
     @include mobile {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
     }
-    @include mobile {
-      font-size: 1.5rem;
+    @include tablet {
+      font-size: 1.4rem;
     }
     @include laptop {
-      font-size: 1.8rem;
-    }
-  }
-}
-
-.reset {
-  position: relative;
-  width: 100%;
-  animation: reveal 0.2s ease;
-
-  h1 {
-    font-weight: 600;
-    text-align: center;
-    margin-top: 20px;
-    color: $mode-text;
-
-    @include mobile {
-      padding: 0 20px;
-      font-size: 1.7rem;
-    }
-  }
-  p {
-    text-align: center;
-    font-weight: 300;
-
-    @include mobile {
-      font-size: 0.9rem;
+      font-size: 1.6rem;
     }
   }
 
   &__form {
     position: relative;
+    width: 90%;
+    margin: 10px auto;
 
     @include mobile {
       width: 90%;
-      margin: 20px auto;
     }
     @include tablet {
-      width: 60%;
-      margin: 20px auto;
+      width: 70%;
     }
     @include laptop {
       width: 30%;
-      margin: 20px auto;
     }
 
     .message{
@@ -176,7 +166,7 @@ export default {
         margin-bottom: 20px;
       }
       @include laptop {
-        margin-bottom: 20px;
+        margin-bottom: 30px;
       }
 
       input {
@@ -252,9 +242,27 @@ export default {
           font-size: 0.9rem;
         }
       }
+
+      .password__toggle {
+        display: block;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-45%);
+        right: 15px;
+        text-transform: capitalize;
+        transition: 0.15s ease;
+        font-weight: 300;
+        cursor: pointer;
+        z-index: 15;
+
+        i {
+          color: $mode-input;
+          cursor: pointer;
+        }
+      }
     }
 
-    .reset__btn {
+    .password__btn {
       width: 100%;
       padding: 15px 0;
       border: none;
@@ -319,21 +327,13 @@ export default {
   }
 }
 
+// Loading animation
 @keyframes loading {
   0% {
     transform: translateX(-25px);
   }
   100% {
     transform: translateX(20px);
-  }
-}
-
-@keyframes reveal {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }
 </style>

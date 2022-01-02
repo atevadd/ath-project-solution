@@ -5,27 +5,42 @@
     </section>
     <section class="login__form">
       <h1>Exploring the world starts here. Login to begin</h1>
-      <form action="" autocomplete="off">
+
+      <div class="message" v-if="message">
+        {{ message }}
+      </div>
+      <form autocomplete="off" @submit.prevent="loginUser">
         <BaseInputField class="input-box">
           <input
             type="email"
             id="email"
-            required
-            min="0"
+            v-model="loginDetails.email"
             autocomplete="email"
+            required
           />
           <label for="email">Email</label>
         </BaseInputField>
+        <router-link :to="{ name: 'ForgotPassword' }" class="forgot-password"
+          >Forgot Password?</router-link
+        >
         <BaseInputField class="input-box">
-          <input type="text" id="country" required />
-          <label for="country">Password</label>
+          <input
+            type="password"
+            id="password"
+            v-model="loginDetails.password"
+            required
+          />
+          <label for="password">Password</label>
+          <span class="password__toggle" @click="togglePassword"
+            ><i class="bx bx-hide"></i
+          ></span>
         </BaseInputField>
-        <BaseButton :class="[isLoading ? 'loading' : '', 'login__btn']">
+        <BaseButton :class="['login__btn', isLoading ? 'loading' : '']">
           Login
         </BaseButton>
 
         <p class="login__alt-text">
-          Don''t have an account?
+          Don't have an account?
           <router-link :to="{ name: 'Signup' }" class="login-link"
             >Signup</router-link
           >
@@ -38,9 +53,13 @@
 <script>
 import BaseInputField from "../components/BaseInputField";
 import BaseButton from "../components/BaseButton";
+import axios from "axios";
 
 export default {
   name: "Login",
+  props: {
+    message: String,
+  },
   components: {
     BaseInputField,
     BaseButton,
@@ -48,7 +67,49 @@ export default {
   data() {
     return {
       isLoading: false,
+      loginDetails: {
+        email: "",
+        password: "",
+      },
     };
+  },
+  methods: {
+    togglePassword(e) {
+      let passwordField =
+        e.target.parentElement.previousElementSibling.previousElementSibling;
+      let icon = e.target;
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.className = "bx bxs-hide";
+      } else {
+        passwordField.type = "password";
+        icon.className = "bx bxs-show";
+      }
+    },
+    loginUser() {
+      this.isLoading = true;
+
+      console.log(this.loginDetails);
+
+      let config = {
+        method: "POST",
+        url: "https://dev.pay4me.app/api/v2/auth/login",
+        header: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify(this.loginDetails),
+      };
+
+      axios(config)
+        .then((response) => {
+          this.isLoading = false;
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+          this.isLoading = false;
+        })
+    },
   },
 };
 </script>
@@ -99,40 +160,56 @@ export default {
   }
 
   &__form {
-    width: 100%;
+    width: 90%;
     height: 100%;
-    padding: 40px;
 
     @include mobile {
       display: flex;
       flex-direction: column;
+      padding: 0;
+      width: 90%;
+      margin: 20px auto;
     }
     @include tablet {
       display: flex;
       flex-direction: column;
+      width: 60%;
+      margin: 20px auto;
     }
     @include laptop {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
+            margin: auto;
+      padding: 40px;
     }
 
     h1 {
+      text-align: left;
+      margin: 20px auto;
       color: $mode-text;
 
       @include mobile {
-        font-size: 1.5rem;
-        margin-bottom: 25px;
+        font-size: 1.4rem;
       }
       @include tablet {
-        font-size: 1.3rem;
-        margin-bottom: 25px;
+        font-size: 1.4rem;
       }
       @include laptop {
-        font-size: 2rem;
-        margin-bottom: 35px;
+        font-size: 1.6rem;
       }
+    }
+
+    .message {
+      width: 100%;
+      padding: 7px;
+      border-radius: 5px;
+      background-color: #418341;
+      color: $white;
+      text-align: center;
+      font-size: 0.85rem;
+      margin-bottom: 15px;
     }
 
     form {
@@ -172,6 +249,7 @@ export default {
               padding: 0 5px;
               color: $mode-text;
               background: $mode-bg;
+            //   background: transparent;
               z-index: 10;
               font-weight: 600;
             }
@@ -188,9 +266,6 @@ export default {
               background: $mode-bg;
               z-index: 10;
             }
-          }
-          &:autocomplete {
-            background-color: transparent;
           }
           &:valid:not(:focus) {
             border: 1px solid #aaa;
@@ -225,6 +300,46 @@ export default {
           @include laptop {
             font-size: 0.9rem;
           }
+        }
+
+        .password__toggle {
+          display: block;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-45%);
+          right: 15px;
+          text-transform: capitalize;
+          transition: 0.15s ease;
+          font-weight: 300;
+          cursor: pointer;
+          z-index: 15;
+
+          i {
+            color: $mode-input;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .forgot-password {
+        text-decoration: none;
+        display: block;
+        text-align: right;
+        color: $mode-text;
+        margin: 5px 0;
+
+        @include mobile {
+          font-size: 0.75rem;
+        }
+        @include mobile {
+          font-size: 0.83rem;
+        }
+        @include laptop {
+          font-size: 0.88rem;
+        }
+
+        &:hover {
+          text-decoration: underline;
         }
       }
 
@@ -265,6 +380,7 @@ export default {
           z-index: 2;
           cursor: wait;
           color: rgb(167, 167, 167);
+          pointer-events: none;
 
           &::before {
             content: "";

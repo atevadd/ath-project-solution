@@ -1,145 +1,102 @@
 <template>
-  <!-- Response element after code has been sent -->
-  <main class="sent" v-if="isSent">
-    <h1>Password reset code sent</h1>
-  </main>
+  <main class="new-password">
+    <h1>Enter your new password</h1>
 
-  <!-- The password reset form -->
-  <main class="reset" v-else>
-    <h1>Forget password?</h1>
-    <p>Enter your email to reset your password</p>
-
-    <form class="reset__form" @submit.prevent="resetPassword">
-        <div class="message" v-show="errorMessage">{{ errorMessage }}</div>
+    <form class="new-password__form" @submit.prevent="setPassword">
       <BaseInputField class="input-box">
-        <input
-          type="email"
-          id="email"
-          required
-          autocomplete="email"
-          inputmode="email"
-          v-model="resetDetails.email"
-        />
+        <input type="email" v-model="userDetails.email" id="email" required inputmode="email"/>
         <label for="email">Email</label>
       </BaseInputField>
-      <BaseButton
-        :class="['reset__btn', isLoading ? 'loading' : '']"
-        type="submit"
-        >Reset password</BaseButton
-      >
+      <BaseInputField class="input-box">
+        <input type="text" v-model="userDetails.code" id="code" required  inputmode="numeric"/>
+        <label for="code">Reset code</label>
+      </BaseInputField>
+      <BaseInputField class="input-box">
+        <input
+          type="password" v-model="userDetails.password"
+          id="password"
+          autocomplete="new-password"
+          required
+        />
+        <label for="password">New password</label>
+      </BaseInputField>
+      <BaseButton :class="['new-password__btn', isLoading ? 'loading' : '']" type="submit">Submit</BaseButton>
     </form>
   </main>
 </template>
 
 <script>
-import BaseButton from "../components/BaseButton.vue";
-import BaseInputField from "../components/BaseInputField.vue";
+import BaseInputField from "@/components/BaseInputField.vue";
+import BaseButton from "@/components/BaseButton.vue";
 import axios from "axios";
 
 export default {
-  name: "ForgotPassword",
-  components: { BaseButton, BaseInputField },
-  data() {
-    return {
-      isLoading: false,
-      isSent: false,
-      errorMessage: null,
-      resetDetails: {
-        email: "",
-      },
-    };
+  name: "NewPassword",
+  components: {
+    BaseInputField,
+    BaseButton,
   },
-  methods: {
-    resetPassword() {
-      console.log(this.resetDetails);
-
-      this.isLoading = true;
-
-      let config = {
-        method: "POST",
-        url: "https://dev.pay4me.app/api/v2/auth/forgot-password",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify(this.resetDetails),
-      };
-
-      axios(config)
-        .then((response) => {
-          console.log(response);
-          this.isLoading = false;
-
-          if (response.data.status === 200 || response.data.success === true) {
-            this.isSent = true;
-            setTimeout(() => {
-              this.$router.push({
-                name: "NewPassword",
-              });
-            }, 2000);
+  data(){
+      return {
+          isLoading: false,
+          userDetails:{
+              email:'',
+              code: '',
+              password: '',
           }
-        })
-        .catch((error) => {
-          this.errorMessage = 'This email does not exist';
-          this.isLoading = false;
-
-          setTimeout(()=>{
-              this.errorMessage = null;
-          }, 4000)
-        });
-    },
+      }
   },
+  methods:{
+      setPassword(){
+          console.log(this.userDetails)
+
+          this.isLoading = true;
+
+          let config = {
+              method: "POST",
+              url: "https://dev.pay4me.app/api/v2/auth/reset-password",
+              headers:{
+                  "Content-Type": "application/json",
+              },
+              data: JSON.stringify(this.resetDetails)
+          }
+
+          axios(config)
+          .then(response => {
+              console.log(response)
+              this.isLoading = false;
+          })
+          .catch(err => {
+              console.log(err.response.data)
+              this.isLoading = false;
+          })
+      }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-.sent {
-  position: relative;
-  width: 100%;
-  animation: reveal 0.2s ease;
+.new-password{
+    width: 100%;
+    position: relative;
 
-  h1 {
-    text-align: center;
-    margin: 20px 0;
-    font-weight: 600;
+    h1{
+        text-align: center;
+        margin: 15px 0;
+        color: $mode-text;
 
-    @include mobile {
-      font-size: 1.3rem;
+        @include mobile{
+            font-size: 1.3rem;
+        }
+        @include tablet{
+            font-size: 1.6rem;
+        }
+        @include laptop{
+            font-size: 1.8rem;
+        }
     }
-    @include mobile {
-      font-size: 1.5rem;
-    }
-    @include laptop {
-      font-size: 1.8rem;
-    }
-  }
-}
 
-.reset {
-  position: relative;
-  width: 100%;
-  animation: reveal 0.2s ease;
-
-  h1 {
-    font-weight: 600;
-    text-align: center;
-    margin-top: 20px;
-    color: $mode-text;
-
-    @include mobile {
-      padding: 0 20px;
-      font-size: 1.7rem;
-    }
-  }
-  p {
-    text-align: center;
-    font-weight: 300;
-
-    @include mobile {
-      font-size: 0.9rem;
-    }
-  }
-
-  &__form {
+    &__form {
     position: relative;
 
     @include mobile {
@@ -153,16 +110,6 @@ export default {
     @include laptop {
       width: 30%;
       margin: 20px auto;
-    }
-
-    .message{
-        text-align: center;
-        padding: 7px;
-        border-radius: 5px;
-        background-color: rgb(216, 43, 43);
-        color: $white;
-        margin: 10px 0 12px;
-        font-size: .9rem;
     }
 
     .input-box {
@@ -254,7 +201,7 @@ export default {
       }
     }
 
-    .reset__btn {
+    .new-password__btn {
       width: 100%;
       padding: 15px 0;
       border: none;
@@ -316,24 +263,6 @@ export default {
         }
       }
     }
-  }
-}
-
-@keyframes loading {
-  0% {
-    transform: translateX(-25px);
-  }
-  100% {
-    transform: translateX(20px);
-  }
-}
-
-@keyframes reveal {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }
 </style>
