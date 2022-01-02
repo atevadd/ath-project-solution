@@ -132,6 +132,14 @@ export default {
         })
     },
   },
+
+  mounted(){
+    if(this.message != undefined || this.message != null){
+      setTimeout(()=>{
+        document.querySelector('.message').remove()
+      }, 4500)
+    }
+  }
 };
 </script>
 
@@ -230,7 +238,7 @@ export default {
       color: $white;
       text-align: center;
       font-size: 0.85rem;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     form {

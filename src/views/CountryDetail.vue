@@ -9,7 +9,7 @@
     <section class="country__container">
       <section class="country__flag">
         <img
-          :src="countryDetail.flag"
+          :src="countryDetail.flags.png"
           :alt="countryDetail.name + ' flag'"
           loading="lazy"
         />
@@ -109,7 +109,6 @@ export default {
       )
       .then((response) => {
         this.countryDetail = response.data[0];
-        console.log(this.countryDetail);
       })
       .catch((error) => {
         console.log(error);
