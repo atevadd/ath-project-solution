@@ -48,13 +48,16 @@
           <label for="email">Email</label>
         </BaseInputField>
         <BaseInputField class="input-box">
-          <input
+          <!-- <input
             type="text"
             id="country"
             v-model="loginDetails.country"
             required
             inputmode="text"
-          />
+          /> -->
+          <select v-model="loginDetails.country" class="select" required>
+              <option :value="country" v-for="(country, index) in countryList" :key="index">{{ country }}</option>
+          </select>
           <label for="country">country</label>
         </BaseInputField>
         <BaseButton :class="[isLoading ? 'loading' : '', 'signup__btn']">
@@ -76,6 +79,7 @@
 import BaseInputField from "../components/BaseInputField";
 import BaseButton from "../components/BaseButton";
 import axios from "axios";
+import countryList from "@/assets/js/country.js";
 
 export default {
   name: "Signup",
@@ -85,6 +89,7 @@ export default {
   },
   data() {
     return {
+    countryList,
       isLoading: false,
       isSent: false,
       loginDetails: {
@@ -99,7 +104,7 @@ export default {
   },
   methods: {
     submitForm() {
-
+        console.log(this.loginDetails)
       this.isLoading = true;
 
       let config = {
@@ -150,7 +155,7 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err.response);
+          console.log(err.response.data);
           this.isLoading = false;
         })
     },
@@ -190,10 +195,10 @@ export default {
       width: 90%;
     }
     @include tablet {
-      width: 70%;
+      width: 90%;
     }
     @include laptop {
-      width: 30%;
+      width: 40%;
     }
 
     .input-box {
@@ -454,7 +459,7 @@ export default {
           margin-bottom: 30px;
         }
 
-        input {
+        input, .select {
           width: 100%;
           height: 45px;
           border: 1px solid #aaa;

@@ -93,21 +93,18 @@ export default {
     loginUser() {
       this.isLoading = true;
 
-      console.log(this.loginDetails);
-
       let config = {
         method: "POST",
         url: "https://dev.pay4me.app/api/v2/auth/login",
         header: {
           "Content-Type": "application/json",
         },
-        data: JSON.stringify(this.loginDetails),
+        data: this.loginDetails,
       };
 
       axios(config)
         .then((response) => {
           this.isLoading = false;
-          console.log(response.data);
 
           if(response.data.status === 200 || response.data.success === true){
             sessionStorage.setItem('api_token', response.data.data.api_token)
@@ -117,7 +114,6 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err.response.data);
           this.isLoading = false;
 
           if(err.response.data.status === 422){
@@ -196,7 +192,7 @@ export default {
     @include tablet {
       display: flex;
       flex-direction: column;
-      width: 60%;
+      width: 90%;
       margin: 20px auto;
     }
     @include laptop {
