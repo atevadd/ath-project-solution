@@ -116,10 +116,12 @@ export default {
         .catch((err) => {
           this.isLoading = false;
 
-          if(err.response.data.status === 422){
-            this.errorMessage = "The email is incorrect"
+          if(err.response.data.status === 422 && err.response.data.error.fields.email != null ){
+            this.errorMessage = "Your email is incorrect"
+          }else if(err.response.data.status === 422 && err.response.data.error.fields.password[0] != null ){
+            this.errorMessage = "The password must be at least 8 characters"
           }else if(err.response.data.status === 401){
-            this.errorMessage = 'wrong password'
+            this.errorMessage = 'Your password is wrong'
           }else{
             this.errorMessage = 'Incorrect details'
           }
