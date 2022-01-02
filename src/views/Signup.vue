@@ -79,7 +79,6 @@
 import BaseInputField from "../components/BaseInputField";
 import BaseButton from "../components/BaseButton";
 import axios from "axios";
-// import countryList from "@/assets/js/country.js";
 
 export default {
   name: "Signup",
@@ -105,7 +104,7 @@ export default {
   },
   methods: {
     submitForm() {
-      console.log(this.loginDetails);
+    //   console.log(this.loginDetails);
       this.isLoading = true;
 
       let config = {
@@ -130,7 +129,7 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          console.log(error.response.data);
+        //   console.log(error.response.data);
 
           this.errorMessage = error.response.data.error.fields.email[0];
 
