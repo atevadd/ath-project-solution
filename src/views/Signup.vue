@@ -36,6 +36,7 @@
     <section class="signup__form">
       <h1>Exploring the world starts here. Signup to continue</h1>
       <form autocomplete="off" @submit.prevent="submitForm">
+        <div class="errorMessage" v-show="errorMessage">{{ errorMessage }}</div>
         <BaseInputField class="input-box">
           <input
             type="email"
@@ -48,15 +49,14 @@
           <label for="email">Email</label>
         </BaseInputField>
         <BaseInputField class="input-box">
-          <!-- <input
-            type="text"
-            id="country"
-            v-model="loginDetails.country"
-            required
-            inputmode="text"
-          /> -->
           <select v-model="loginDetails.country" class="select" required>
-              <option :value="country" v-for="(country, index) in countryList" :key="index">{{ country }}</option>
+            <option
+              :value="country"
+              v-for="(country, index) in countryList"
+              :key="index"
+            >
+              {{ country }}
+            </option>
           </select>
           <label for="country">country</label>
         </BaseInputField>
@@ -89,9 +89,10 @@ export default {
   },
   data() {
     return {
-    countryList,
+      countryList,
       isLoading: false,
       isSent: false,
+      errorMessage: null,
       loginDetails: {
         email: "",
         country: "",
@@ -104,7 +105,7 @@ export default {
   },
   methods: {
     submitForm() {
-        console.log(this.loginDetails)
+      console.log(this.loginDetails);
       this.isLoading = true;
 
       let config = {
@@ -129,11 +130,24 @@ export default {
         })
         .catch((error) => {
           this.isLoading = false;
-          console.log(error.status);
+          console.log(error.response.data);
+
+          this.errorMessage = error.response.data.error.fields.email[0];
+
+          //   if (error.response.data.error.fields.email[0] !== undefined) {
+          //     this.errorMessage = "The email is already taken";
+          //   } else if (error.response.data.error.fields.country[0]) {
+          //     this.errorMessage = "The selected country is invalid";
+          //   } else {
+          //     this.errorMessage = "Incorrect details";
+          //   }
+
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 4000);
         });
     },
     verifyForm() {
-
       this.isLoading = true;
 
       let config = {
@@ -154,10 +168,10 @@ export default {
             this.$router.push({ name: "SetPassword" });
           }
         })
-        .catch((err) => {
-          console.log(err.response.data);
+        .catch((error) => {
+          console.log(error.response.data);
           this.isLoading = false;
-        })
+        });
     },
   },
 };
@@ -441,6 +455,16 @@ export default {
       }
     }
 
+    .errorMessage {
+      text-align: center;
+      padding: 7px;
+      border-radius: 5px;
+      background-color: rgb(216, 43, 43);
+      color: $white;
+      margin: 5px 0 15px;
+      font-size: 0.9rem;
+    }
+
     form {
       position: relative;
       width: 100%;
@@ -459,7 +483,8 @@ export default {
           margin-bottom: 30px;
         }
 
-        input, .select {
+        input,
+        .select {
           width: 100%;
           height: 45px;
           border: 1px solid #aaa;
