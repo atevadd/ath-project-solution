@@ -51,7 +51,6 @@ export default {
   },
   methods: {
     resetPassword() {
-      console.log(this.resetDetails);
 
       this.isLoading = true;
 
@@ -66,7 +65,6 @@ export default {
 
       axios(config)
         .then((response) => {
-          console.log(response);
           this.isLoading = false;
 
           if (response.data.status === 200 || response.data.success === true) {

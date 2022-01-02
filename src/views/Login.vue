@@ -9,7 +9,9 @@
       <div class="message" v-if="message">
         {{ message }}
       </div>
-      <form autocomplete="off" @submit.prevent="loginUser">
+      
+      <form @submit.prevent="loginUser">
+        <div class="errorMessage" v-show="errorMessage">{{ errorMessage }}</div>
         <BaseInputField class="input-box">
           <input
             type="email"
@@ -29,6 +31,7 @@
             id="password"
             v-model="loginDetails.password"
             required
+            autocomplete="password"
           />
           <label for="password">Password</label>
           <span class="password__toggle" @click="togglePassword"
@@ -71,6 +74,7 @@ export default {
         email: "",
         password: "",
       },
+      errorMessage: null,
     };
   },
   methods: {
@@ -103,11 +107,30 @@ export default {
       axios(config)
         .then((response) => {
           this.isLoading = false;
-          console.log(response);
+          console.log(response.data);
+
+          if(response.data.status === 200 || response.data.success === true){
+            sessionStorage.setItem('api_token', response.data.data.api_token)
+            this.$router.push({
+              name: 'CountryListing'
+            })
+          }
         })
         .catch((err) => {
           console.log(err.response.data);
           this.isLoading = false;
+
+          if(err.response.data.status === 422){
+            this.errorMessage = "The email is incorrect"
+          }else if(err.response.data.status === 401){
+            this.errorMessage = 'wrong password'
+          }else{
+            this.errorMessage = 'Incorrect details'
+          }
+
+          setTimeout(() =>{
+            this.errorMessage = null;
+          }, 4000)
         })
     },
   },
@@ -215,6 +238,16 @@ export default {
     form {
       position: relative;
       width: 100%;
+
+      .errorMessage{
+        text-align: center;
+        padding: 7px;
+        border-radius: 5px;
+        background-color: rgb(216, 43, 43);
+        color: $white;
+        margin: 10px 0 12px;
+        font-size: .9rem;
+      }
 
       .input-box {
         position: relative;

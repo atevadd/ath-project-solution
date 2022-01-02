@@ -9,7 +9,7 @@
     <section class="country__container">
       <section class="country__flag">
         <img
-          :src="countryDetail.flags.png"
+          :src="countryDetail.flag"
           :alt="countryDetail.name + ' flag'"
           loading="lazy"
         />
@@ -49,8 +49,7 @@
               <span
                 class="lang"
                 v-for="(language, index) in countryDetail.languages"
-                :key="index"
-                >{{ language.name }}
+                :key="index">{{ language.name }}
               </span>
             </p>
           </div>
@@ -62,7 +61,12 @@
               class="borders"
               v-for="(border, index) in countryDetail.borders"
               :key="index"
-              >{{ border }}</span
+              ><router-link
+                  :to="{
+                    name: 'CountryDetail',
+                  }"
+                  >{{ border }}</router-link
+                ></span
             >
           </p>
         </div>
@@ -330,6 +334,11 @@ export default {
           margin-right: 10px;
           text-transform: lowercase;
           font-size: 0.85rem;
+
+          a{
+            text-decoration: none;
+            color: $mode-text;
+          }
         }
       }
     }

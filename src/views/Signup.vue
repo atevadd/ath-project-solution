@@ -99,7 +99,6 @@ export default {
   },
   methods: {
     submitForm() {
-      console.log(this.loginDetails);
 
       this.isLoading = true;
 
@@ -114,7 +113,6 @@ export default {
 
       axios(config)
         .then((response) => {
-          console.log(response);
           this.isLoading = false;
 
           if (
@@ -130,7 +128,6 @@ export default {
         });
     },
     verifyForm() {
-      console.log(this.verificationDetails);
 
       this.isLoading = true;
 

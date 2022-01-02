@@ -1,4 +1,5 @@
 <template>
+// This is the page to create a new password after email verification
   <main class="password">
     <h1>Create your password</h1>
     <form
@@ -96,10 +97,8 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err.response.data);
           this.isLoading = false;
           this.errorMessage = 'Password must be at least 8 characters'
-        //   this.errorMessage = err.response.data.error.fields.password[0]
 
           setTimeout(() =>{
               this.errorMessage = null

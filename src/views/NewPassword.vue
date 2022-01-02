@@ -58,13 +58,22 @@ export default {
               headers:{
                   "Content-Type": "application/json",
               },
-              data: JSON.stringify(this.resetDetails)
+              data: JSON.stringify(this.userDetails)
           }
 
           axios(config)
           .then(response => {
               console.log(response)
               this.isLoading = false;
+
+              if(response.data.status === 200 || response.data.success === true){
+                this.$router.push({
+                  name: 'Login',
+                  params: {
+                    message: response.data.data.message
+                  }
+                })
+              }
           })
           .catch(err => {
               console.log(err.response.data)
