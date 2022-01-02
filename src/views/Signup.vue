@@ -79,7 +79,7 @@
 import BaseInputField from "../components/BaseInputField";
 import BaseButton from "../components/BaseButton";
 import axios from "axios";
-import countryList from "@/assets/js/country.js";
+// import countryList from "@/assets/js/country.js";
 
 export default {
   name: "Signup",
@@ -89,7 +89,7 @@ export default {
   },
   data() {
     return {
-      countryList,
+      countryList:["Nigeria", "Ghana", "Liberia", "Sierra Leone", "Kenya"],
       isLoading: false,
       isSent: false,
       errorMessage: null,
@@ -133,14 +133,6 @@ export default {
           console.log(error.response.data);
 
           this.errorMessage = error.response.data.error.fields.email[0];
-
-          //   if (error.response.data.error.fields.email[0] !== undefined) {
-          //     this.errorMessage = "The email is already taken";
-          //   } else if (error.response.data.error.fields.country[0]) {
-          //     this.errorMessage = "The selected country is invalid";
-          //   } else {
-          //     this.errorMessage = "Incorrect details";
-          //   }
 
           setTimeout(() => {
             this.errorMessage = null;
