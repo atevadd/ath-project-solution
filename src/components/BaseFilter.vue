@@ -5,7 +5,7 @@
       <i class="bx bx-chevron-down"></i>
     </div>
     <div class="filter__items">
-      <p v-for="(continent, index) in continents" :key="index" @click="FilterRegionName(continent), filterByRegion(continent)">
+      <p v-for="(continent, index) in continents" :key="index" @click="FilterRegionName(continent), filterByRegion(continent), showFilterItems()">
         {{ continent }}
       </p>
     </div>
