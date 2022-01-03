@@ -1,23 +1,24 @@
 <template>
-<BaseNavbar />
+  <BaseNavbar />
   <main>
     <section class="filter-region">
       <BaseSearchbar
         placeholderText="Search for a country..."
         class="search-bar"
+        v-model="searchText"
+        @printer="updateText($event)"
       />
-      <BaseFilter />
+      <BaseFilter @filterByRegion="filterByRegion($event)"/>
     </section>
-
-    <!-- loading state for countries while they are loaded -->
+    
     <section class="country" v-if="countries">
       <CountryCard
-        v-for="(country, index) in countries"
+        v-for="(country, index) in filteredCountries"
         :key="index"
         :countryInfo="country"
-        @search-text="search"
       />
     </section>
+    <!-- loading state for countries while they are loaded -->
     <section class="loading" v-else>
       <h1>Please hold on a bit, while the countries are loading</h1>
       <div class="spinner"></div>
@@ -35,23 +36,19 @@ import axios from "axios";
 export default {
   name: "CountryListing",
   components: {
-        BaseNavbar,
+    BaseNavbar,
     BaseSearchbar,
     BaseFilter,
     CountryCard,
   },
   data() {
     return {
+      searchText: "",
       countries: null,
     };
   },
-  methods:{
-    search(data){
-      console.log(data)
-    }
-  },
-  created() {
-    axios
+   async created() {
+    await axios
       .get("https://restcountries.com/v2/all")
       .then((response) => {
         this.countries = response.data;
@@ -60,6 +57,40 @@ export default {
         console.log(error);
       });
   },
+  methods: {
+    updateText(text) {
+      this.searchText = text;
+    },
+    filterByRegion(region){
+      axios.get(`https://restcountries.com/v3.1/region/${region.toLowerCase()}`)
+      .then(response =>{
+        this.countries = response.data;
+      })
+      .catch(error =>{
+        console.log(error);
+      })
+    }
+  },
+  computed:{
+    filteredCountries: function(){
+      return this.countries.filter((nation) =>{
+        if(this.searchText == ''){
+          if(typeof nation.name == "string"){
+            return nation.name.match(this.searchText)          
+          }else{
+            return nation.name.common.match(this.searchText)
+          }
+        }else{
+          if(typeof nation.name == "string"){
+            return nation.name.match(this.searchText.replace(this.searchText[0], this.searchText[0].toUpperCase())) 
+          }else{
+            return nation.name.common.match(this.searchText.replace(this.searchText[0], this.searchText[0].toUpperCase()))
+          }
+
+        }
+      })
+    }
+  }
 };
 </script>
 
@@ -96,7 +127,7 @@ main {
         width: 90%;
         margin: 30px auto;
       }
-      @include tablet{
+      @include tablet {
         width: 50%;
       }
       @include laptop {
@@ -114,12 +145,12 @@ main {
         font-weight: 400;
         outline: none;
         border-radius: 5px;
-        transition: .15s ease;
+        transition: 0.15s ease;
 
         &:focus {
           outline: 1px solid $mode-text;
 
-          & ~ span > i{
+          & ~ span > i {
             color: $mode-text;
             // font-weight: 800;
           }
@@ -186,11 +217,11 @@ main {
     .spinner {
       width: 35px;
       height: 35px;
-      border: 3px solid $mode-text;
+      border: 5px solid $mode-text;
       border-bottom: none;
       border-left: none;
-      animation: rotate 0.2s linear infinite;
-      border-radius: 50%;
+      animation: rotate .4s ease-in infinite;
+      border-radius: 50px;
       margin-top: 30px;
     }
   }

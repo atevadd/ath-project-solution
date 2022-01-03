@@ -6,7 +6,8 @@
       </router-link>
     </div>
     <div class="country__details">
-      <h3 class="country__name">{{countryInfo.name}}</h3>
+      <h3 class="country__name" v-if="typeof countryInfo.name == 'string'">{{countryInfo.name}}</h3>
+      <h3 class="country__name" v-else>{{countryInfo.name.common}}</h3>
       <p class="country__population">
         <span class="bold">Population: </span>{{countryInfo.population}}
       </p>

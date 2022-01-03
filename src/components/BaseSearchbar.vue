@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="search" :placeholder="placeholderText" v-model="searchText" @keyup="search(searchText)"/>
+    <input type="text" :placeholder="placeholderText" v-model="searchText" @keyup="print(searchText)"/>
     <span><i class="bx bx-search-alt-2"></i></span>
   </div>
 </template>
@@ -15,18 +15,14 @@ export default {
     },
   },
   data(){
-    return{
-      searchText: "",
+    return {
+      searchText:""
     }
   },
-  methods:{
-    search(data){
-      this.$emit('searchtext', data)
+  methods: {
+    print(data){
+        this.$emit('printer', data)
     }
   }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

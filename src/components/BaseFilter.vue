@@ -1,11 +1,11 @@
 <template>
   <section class="filter">
-    <div class="filter__dropdown" @click="showFilterItems">
-      <p>Filter by region</p>
+    <div class="filter__dropdown" @mouseenter="showFilterItems" @click="showFilterItems">
+      <p>{{filterName}}</p>
       <i class="bx bx-chevron-down"></i>
     </div>
     <div class="filter__items">
-      <p v-for="(continent, index) in continents" :key="index">
+      <p v-for="(continent, index) in continents" :key="index" @click="FilterRegionName(continent), filterByRegion(continent)">
         {{ continent }}
       </p>
     </div>
@@ -18,11 +18,18 @@ export default {
   data() {
     return {
       continents: ["Africa", "America", "Asia", "Europe", "Oceania"],
+      filterName: 'Filter by region',
     };
   },
   methods:{
     showFilterItems(){
       document.querySelector(".filter__items").classList.toggle("show");
+    },
+    filterByRegion(region){
+      this.$emit('filterByRegion', region);
+    },
+    FilterRegionName(data){
+      this.filterName = data;
     }
   },
 };
