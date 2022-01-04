@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import CountryListing from '../views/CountryListing.vue';
 // import CountryDetail from '../views/CountryDetail.vue';
 import Signup from "../views/Signup.vue";
-// import Login from "../views/Login.vue";
+import Login from "../views/Login.vue";
 // import ForgotPassword from "../views/ForgotPassword.vue";
 // import SetPassword from "../views/SetPassword.vue";
 // // import SetPassword from "../views/SetPassword.vue";
@@ -10,10 +10,10 @@ import Signup from "../views/Signup.vue";
 const routes = [
   {
     path: "/",
-    name: "Signup",
-    component: Signup,
+    name: "Login",
+    component: Login,
     meta: {
-      title: "Where in the world - Signup",
+      title: "Where in the world - Login",
     },
   },
   {
@@ -45,13 +45,13 @@ const routes = [
     },
   },
   {
-    path: "/login",
-    name: "Login",
+    path: "/sinup",
+    name: "Signup",
     component: () =>
-      import(/* webpackChunkName: "Login" */ "../views/Login.vue"),
+      import(/* webpackChunkName: "Login" */ "../views/Signup.vue"),
     props: true,
     meta: {
-      title: "Where in the world - Login",
+      title: "Where in the world - Signup",
     },
   },
   {

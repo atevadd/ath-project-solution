@@ -1,5 +1,5 @@
 <template>
-  <BaseNavbar />
+  <BaseNavbar @load-countries="loadCountries" />
   <main>
     <section class="filter-region">
       <BaseSearchbar
@@ -73,9 +73,24 @@ export default {
       });
   },
   methods: {
+     loadCountries() {
+       axios
+        .get("https://restcountries.com/v2/all")
+        .then((response) => {
+          this.allCountries = response.data;
+          this.countries = this.allCountries.slice(
+            this.startIndex,
+            this.increment
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     // search by country name
     updateText(text) {
       this.searchText = text;
+      console.log(this.searchText);
     },
     // filter by region
     filterByRegion(region) {
@@ -88,15 +103,13 @@ export default {
           console.log(error);
         });
     },
-    // infinite scrolling 
+    // infinite scrolling
     handleScrollToBottom() {
       const observer = new IntersectionObserver((entries) => {
-        if (
-          this.countries != null
-        ) {
+        if (this.countries != null) {
           if (entries[0].isIntersecting && this.increment < this.maxIndex) {
             this.addToCountries();
-          }else{
+          } else {
             this.showLoader = false;
           }
         }
@@ -106,14 +119,14 @@ export default {
     },
     // This function is used to add more countries to the list
     addToCountries() {
-        this.showLoader = true;
-        this.startIndex = this.increment;
-        this.increment += 10;
-        setTimeout(() =>{
-          this.countries = this.countries.concat(
-          this.allCountries.slice((this.startIndex + 1), this.increment)
+      this.showLoader = true;
+      this.startIndex = this.increment;
+      this.increment += 10;
+      setTimeout(() => {
+        this.countries = this.countries.concat(
+          this.allCountries.slice(this.startIndex + 1, this.increment)
         );
-        }, 1000);
+      }, 1000);
     },
   },
   // calling the infinite scrolling function

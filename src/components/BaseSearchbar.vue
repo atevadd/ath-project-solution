@@ -1,7 +1,7 @@
 <template>  
   <!-- The searchbar component -->
   <div>
-    <input type="search" :placeholder="placeholderText" v-model="searchText" @keyup="print(searchText)"/>
+    <input type="text" :placeholder="placeholderText" v-model="searchText" @keyup="print(searchText)"/>
     <span><i class="bx bx-search-alt-2"></i></span>
   </div>
 </template>

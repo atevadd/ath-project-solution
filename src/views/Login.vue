@@ -10,7 +10,7 @@
         {{ message }}
       </div>
       
-      <form @submit.prevent="loginUser">
+      <form @submit.prevent="loginUser" autocomplete="on">
         <div class="errorMessage" v-show="errorMessage">{{ errorMessage }}</div>
         <BaseInputField class="input-box">
           <input
@@ -31,7 +31,7 @@
             id="password"
             v-model="loginDetails.password"
             required
-            autocomplete="password"
+            autocomplete="current-password"
           />
           <label for="password">Password</label>
           <span class="password__toggle" @click="togglePassword"

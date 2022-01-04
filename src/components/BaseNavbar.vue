@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav>
-      <h1 tabindex="0">Where in the world?</h1>
+      <h1 tabindex="0" @click="loadCountries">Where in the world?</h1>
       <button class="theme-toggle"><i class="bx bx-moon"></i>Dark mode</button>
     </nav>
   </header>
@@ -10,6 +10,11 @@
 <script>
 export default {
   name: "BaseNavbar",
+  methods:{
+    loadCountries(){
+      this.$emit('load-countries');
+    }
+  }
 };
 </script>
 
@@ -60,6 +65,7 @@ header {
 
     h1 {
       color: $mode-text;
+      cursor: pointer;
       
       @include mobile{
         font-size: 1rem;
