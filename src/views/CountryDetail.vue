@@ -1,6 +1,6 @@
 <template>
-  <BaseNavbar />
   <main class="country">
+      <BaseNavbar />
     <!-- Button component -->
     <BaseButton class="country__back-btn" @click="goBack">
       <i class="bx bx-left-arrow-alt"></i>
