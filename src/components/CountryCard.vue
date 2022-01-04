@@ -1,5 +1,5 @@
 <template>
-// each country from the array is rendered as a card
+<!-- each country from the array is rendered as a card -->
   <div class="country__card">
     <div class="country__image">
       <router-link :to="{name: 'CountryDetail', params: {countryname: countryInfo.name}}">

@@ -1,5 +1,5 @@
 <template>
-  // The filter component
+  <!--  The filter component -->
   <section class="filter">
     <div class="filter__dropdown" @click="showFilterItems">
       <p>{{filterName}}</p>
