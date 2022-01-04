@@ -14,8 +14,11 @@
       <p class="country__region">
         <span class="bold">Region: </span>{{countryInfo.region}}
       </p>
-      <p class="country__capital">
+      <p class="country__capital" v-if="typeof countryInfo.capital === 'string'">
         <span class="bold">Capital: </span>{{countryInfo.capital}}
+      </p>
+      <p class="country__capital" v-else>
+        <span class="bold">Capital: </span>{{countryInfo.capital[0]}}
       </p>
     </div>
   </div>

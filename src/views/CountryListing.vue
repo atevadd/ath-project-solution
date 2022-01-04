@@ -65,6 +65,7 @@ export default {
       axios.get(`https://restcountries.com/v3.1/region/${region.toLowerCase()}`)
       .then(response =>{
         this.countries = response.data;
+        console.log(response.data);
       })
       .catch(error =>{
         console.log(error);
