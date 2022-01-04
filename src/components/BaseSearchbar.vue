@@ -1,6 +1,7 @@
-<template>
+<template>  
+  // The searchbar component
   <div>
-    <input type="text" :placeholder="placeholderText" v-model="searchText" @keyup="print(searchText)"/>
+    <input type="search" :placeholder="placeholderText" v-model="searchText" @keyup="print(searchText)"/>
     <span><i class="bx bx-search-alt-2"></i></span>
   </div>
 </template>
@@ -20,6 +21,8 @@ export default {
     }
   },
   methods: {
+    // This function is called when the user starts typing in the search component
+    // it emits an event and the search text
     print(data){
         this.$emit('printer', data)
     }

@@ -8,9 +8,9 @@
         v-model="searchText"
         @printer="updateText($event)"
       />
-      <BaseFilter @filterByRegion="filterByRegion($event)"/>
+      <BaseFilter @filterByRegion="filterByRegion($event)" />
     </section>
-    
+
     <section class="country" v-if="countries">
       <CountryCard
         v-for="(country, index) in filteredCountries"
@@ -18,12 +18,18 @@
         :countryInfo="country"
       />
     </section>
+
     <!-- loading state for countries while they are loaded -->
     <section class="loading" v-else>
       <h1>Please hold on a bit, while the countries are loading</h1>
       <div class="spinner"></div>
     </section>
   </main>
+
+  <footer>
+    <div id="scroll-trigger" ref="infinitescrolltrigger"></div>
+    <div class="circle-loader" v-show="showLoader"></div>
+  </footer>
 </template>
 
 <script>
@@ -45,53 +51,105 @@ export default {
     return {
       searchText: "",
       countries: null,
+      allCountries: null,
+      startIndex: 0,
+      maxIndex: 250,
+      increment: 10,
+      showLoader: false,
     };
   },
-   async created() {
+  async created() {
     await axios
       .get("https://restcountries.com/v2/all")
       .then((response) => {
-        this.countries = response.data;
+        this.allCountries = response.data;
+        this.countries = this.allCountries.slice(
+          this.startIndex,
+          this.increment
+        );
       })
       .catch((error) => {
         console.log(error);
       });
   },
   methods: {
+    // search by country name
     updateText(text) {
       this.searchText = text;
     },
-    filterByRegion(region){
-      axios.get(`https://restcountries.com/v3.1/region/${region.toLowerCase()}`)
-      .then(response =>{
-        this.countries = response.data;
-        console.log(response.data);
-      })
-      .catch(error =>{
-        console.log(error);
-      })
-    }
-  },
-  computed:{
-    filteredCountries: function(){
-      return this.countries.filter((nation) =>{
-        if(this.searchText == ''){
-          if(typeof nation.name == "string"){
-            return nation.name.match(this.searchText)          
+    // filter by region
+    filterByRegion(region) {
+      axios
+        .get(`https://restcountries.com/v3.1/region/${region.toLowerCase()}`)
+        .then((response) => {
+          this.countries = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    // infinite scrolling 
+    handleScrollToBottom() {
+      const observer = new IntersectionObserver((entries) => {
+        if (
+          this.countries != null
+        ) {
+          if (entries[0].isIntersecting && this.increment < this.maxIndex) {
+            this.addToCountries();
           }else{
-            return nation.name.common.match(this.searchText)
+            this.showLoader = false;
           }
-        }else{
-          if(typeof nation.name == "string"){
-            return nation.name.match(this.searchText.replace(this.searchText[0], this.searchText[0].toUpperCase())) 
-          }else{
-            return nation.name.common.match(this.searchText.replace(this.searchText[0], this.searchText[0].toUpperCase()))
-          }
-
         }
-      })
-    }
-  }
+      });
+
+      observer.observe(this.$refs.infinitescrolltrigger);
+    },
+    // This function is used to add more countries to the list
+    addToCountries() {
+        this.showLoader = true;
+        this.startIndex = this.increment;
+        this.increment += 10;
+        setTimeout(() =>{
+          this.countries = this.countries.concat(
+          this.allCountries.slice((this.startIndex + 1), this.increment)
+        );
+        }, 1000);
+    },
+  },
+  // calling the infinite scrolling function
+  mounted() {
+    this.handleScrollToBottom();
+  },
+  // computed properties return the countries that match the search text
+  computed: {
+    filteredCountries: function () {
+      return this.countries.filter((nation) => {
+        if (this.searchText == "") {
+          if (typeof nation.name == "string") {
+            return nation.name.match(this.searchText);
+          } else {
+            return nation.name.common.match(this.searchText);
+          }
+        } else {
+          if (typeof nation.name == "string") {
+            return nation.name.match(
+              this.searchText.replace(
+                this.searchText[0],
+                this.searchText[0].toUpperCase()
+              )
+            );
+          } else {
+            return nation.name.common.match(
+              this.searchText.replace(
+                this.searchText[0],
+                this.searchText[0].toUpperCase()
+              )
+            );
+          }
+        }
+      });
+    },
+  },
 };
 </script>
 
@@ -219,12 +277,39 @@ main {
       width: 35px;
       height: 35px;
       border: 5px solid $mode-text;
-      border-bottom: none;
-      border-left: none;
-      animation: rotate .4s ease-in infinite;
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+      animation: rotate 0.5s ease-in infinite;
       border-radius: 50px;
       margin-top: 30px;
     }
+  }
+}
+
+footer {
+  position: relative;
+  width: 100%;
+  margin-bottom: 50px;
+
+  #scroll-trigger {
+    height: 10px;
+    margin: 0 auto;
+  }
+
+  .circle-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 5px solid $mode-text;
+    border-top-color: $mode-text;
+    border-right-color: $mode-text;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    animation: spin 1s ease-in-out infinite;
   }
 }
 

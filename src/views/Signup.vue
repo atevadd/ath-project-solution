@@ -103,8 +103,8 @@ export default {
     };
   },
   methods: {
+    // This handles the signup form
     submitForm() {
-    //   console.log(this.loginDetails);
       this.isLoading = true;
 
       let config = {
@@ -138,6 +138,7 @@ export default {
           }, 4000);
         });
     },
+    // This handles the verification form
     verifyForm() {
       this.isLoading = true;
 

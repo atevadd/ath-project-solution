@@ -1,11 +1,12 @@
 <template>
+  // The filter component
   <section class="filter">
-    <div class="filter__dropdown" @mouseenter="showFilterItems" @click="showFilterItems">
+    <div class="filter__dropdown" @click="showFilterItems">
       <p>{{filterName}}</p>
       <i class="bx bx-chevron-down"></i>
     </div>
     <div class="filter__items">
-      <p v-for="(continent, index) in continents" :key="index" @click="FilterRegionName(continent), filterByRegion(continent), showFilterItems()">
+      <p v-for="(continent, index) in continents" :key="index" @click="FilterRegionName(continent), filterByRegion(continent)">
         {{ continent }}
       </p>
     </div>
@@ -25,6 +26,7 @@ export default {
     showFilterItems(){
       document.querySelector(".filter__items").classList.toggle("show");
     },
+    // This function emits the selected continent
     filterByRegion(region){
       this.$emit('filterByRegion', region);
     },

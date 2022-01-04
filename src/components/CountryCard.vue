@@ -1,4 +1,5 @@
 <template>
+// each country from the array is rendered as a card
   <div class="country__card">
     <div class="country__image">
       <router-link :to="{name: 'CountryDetail', params: {countryname: countryInfo.name}}">
@@ -14,10 +15,10 @@
       <p class="country__region">
         <span class="bold">Region: </span>{{countryInfo.region}}
       </p>
-      <p class="country__capital" v-if="typeof countryInfo.capital === 'string'">
+      <p class="country__capital" v-if="typeof countryInfo.capital == 'string'">
         <span class="bold">Capital: </span>{{countryInfo.capital}}
       </p>
-      <p class="country__capital" v-else>
+      <p class="country__capital" v-else-if="typeof countryInfo.capital == 'object'">
         <span class="bold">Capital: </span>{{countryInfo.capital[0]}}
       </p>
     </div>
