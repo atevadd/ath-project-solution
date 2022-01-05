@@ -10,6 +10,7 @@
           required
           v-model="verificationDetails.email"
           autocomplete="email"
+          inputmode="email"
         />
         <label for="response-email">Email</label>
       </BaseInputField>
@@ -19,6 +20,7 @@
           id="code"
           required
           v-model="verificationDetails.code"
+          inputmode="numeric"
         />
         <label for="code">verification code</label>
       </BaseInputField>

@@ -10,7 +10,7 @@
       <h3 class="country__name" v-if="typeof countryInfo.name == 'string'">{{countryInfo.name}}</h3>
       <h3 class="country__name" v-else>{{countryInfo.name.common}}</h3>
       <p class="country__population">
-        <span class="bold">Population: </span>{{countryInfo.population}}
+        <span class="bold">Population: </span>{{countryInfo.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}
       </p>
       <p class="country__region">
         <span class="bold">Region: </span>{{countryInfo.region}}

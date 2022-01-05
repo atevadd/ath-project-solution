@@ -3,24 +3,43 @@
     <h1>Enter your new password</h1>
 
     <form class="new-password__form" @submit.prevent="setPassword">
+      <div class="errorMessage" v-show="errorMessage">{{ errorMessage }}</div>
       <BaseInputField class="input-box">
-        <input type="email" v-model="userDetails.email" id="email" required inputmode="email"/>
+        <input
+          type="email"
+          v-model="userDetails.email"
+          id="email"
+          required
+          inputmode="email"
+        />
         <label for="email">Email</label>
       </BaseInputField>
       <BaseInputField class="input-box">
-        <input type="text" v-model="userDetails.code" id="code" required  inputmode="numeric"/>
+        <input
+          type="text"
+          v-model="userDetails.code"
+          id="code"
+          required
+          inputmode="numeric"
+        />
         <label for="code">Reset code</label>
       </BaseInputField>
       <BaseInputField class="input-box">
         <input
-          type="password" v-model="userDetails.password"
+          type="password"
+          v-model="userDetails.password"
           id="password"
           autocomplete="new-password"
+          inputmode="text"
           required
         />
         <label for="password">New password</label>
       </BaseInputField>
-      <BaseButton :class="['new-password__btn', isLoading ? 'loading' : '']" type="submit">Submit</BaseButton>
+      <BaseButton
+        :class="['new-password__btn', isLoading ? 'loading' : '']"
+        type="submit"
+        >Submit</BaseButton
+      >
     </form>
   </main>
 </template>
@@ -36,76 +55,81 @@ export default {
     BaseInputField,
     BaseButton,
   },
-  data(){
-      return {
-          isLoading: false,
-          userDetails:{
-              email:'',
-              code: '',
-              password: '',
-          }
-      }
+  data() {
+    return {
+      isLoading: false,
+      userDetails: {
+        email: "",
+        code: "",
+        password: "",
+      },
+      errorMessage: null,
+    };
   },
-  methods:{
-      setPassword(){
-          console.log(this.userDetails)
+  methods: {
+    setPassword() {
+      // console.log(this.userDetails);
 
-          this.isLoading = true;
+      this.isLoading = true;
 
-          let config = {
-              method: "POST",
-              url: "https://dev.pay4me.app/api/v2/auth/reset-password",
-              headers:{
-                  "Content-Type": "application/json",
+      let config = {
+        method: "POST",
+        url: "https://dev.pay4me.app/api/v2/auth/reset-password",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify(this.userDetails),
+      };
+
+      axios(config)
+        .then((response) => {
+          this.isLoading = false;
+
+          if (response.data.status === 200 || response.data.success === true) {
+            this.$router.push({
+              name: "Login",
+              params: {
+                message: response.data.data.message,
               },
-              data: JSON.stringify(this.userDetails)
+            });
           }
+        })
+        .catch((err) => {
+          this.isLoading = false;
 
-          axios(config)
-          .then(response => {
-              console.log(response)
-              this.isLoading = false;
-
-              if(response.data.status === 200 || response.data.success === true){
-                this.$router.push({
-                  name: 'Login',
-                  params: {
-                    message: response.data.data.message
-                  }
-                })
-              }
-          })
-          .catch(err => {
-              console.log(err.response.data)
-              this.isLoading = false;
-          })
-      }
-  }
+          if(err.response.data.status === 422) {
+            this.errorMessage = err.response.data.error.fields.password[0];
+          }else{
+              this.errorMessage = err.response.data.message;
+          }
+        });
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-.new-password{
-    width: 100%;
-    position: relative;
+.new-password {
+  width: 100%;
+  position: relative;
 
-    h1{
-        text-align: center;
-        margin: 15px 0;
-        color: $mode-text;
+  h1 {
+    text-align: center;
+    margin: 15px 0;
+    color: $mode-text;
 
-        @include mobile{
-            font-size: 1.3rem;
-        }
-        @include tablet{
-            font-size: 1.6rem;
-        }
-        @include laptop{
-            font-size: 1.8rem;
-        }
+    @include mobile {
+      font-size: 1.3rem;
     }
+    @include tablet {
+      font-size: 1.6rem;
+    }
+    @include laptop {
+      font-size: 1.8rem;
+    }
+  }
 
-    &__form {
+  &__form {
     position: relative;
 
     @include mobile {
@@ -113,12 +137,22 @@ export default {
       margin: 20px auto;
     }
     @include tablet {
-      width: 60%;
+      width: 90%;
       margin: 20px auto;
     }
     @include laptop {
-      width: 30%;
+      width: 35%;
       margin: 20px auto;
+    }
+
+    .errorMessage {
+      text-align: center;
+      padding: 7px;
+      border-radius: 5px;
+      background-color: rgb(216, 43, 43);
+      color: $white;
+      margin: 10px 0 12px;
+      font-size: 0.9rem;
     }
 
     .input-box {

@@ -6,7 +6,7 @@
     <section class="login__form">
       <h1>Exploring the world starts here. Login to begin</h1>
 
-      <div class="message" v-if="message">
+      <div class="message" v-show="message">
         {{ message }}
       </div>
       
@@ -19,6 +19,7 @@
             v-model="loginDetails.email"
             autocomplete="email"
             required
+            inputmode="email"
           />
           <label for="email">Email</label>
         </BaseInputField>
@@ -32,6 +33,7 @@
             v-model="loginDetails.password"
             required
             autocomplete="current-password"
+            inputmode="text"
           />
           <label for="password">Password</label>
           <span class="password__toggle" @click="togglePassword"
@@ -78,6 +80,7 @@ export default {
     };
   },
   methods: {
+    // password visibility toggle
     togglePassword(e) {
       let passwordField =
         e.target.parentElement.previousElementSibling.previousElementSibling;
@@ -90,6 +93,7 @@ export default {
         icon.className = "bx bxs-show";
       }
     },
+    // handle login
     loginUser() {
       this.isLoading = true;
 
@@ -132,7 +136,6 @@ export default {
         })
     },
   },
-
   mounted(){
     if(this.message != undefined || this.message != null){
       setTimeout(()=>{

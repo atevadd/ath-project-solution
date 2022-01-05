@@ -145,7 +145,7 @@ export default {
       margin: 20px auto;
     }
     @include tablet {
-      width: 60%;
+      width: 80%;
       margin: 20px auto;
     }
     @include laptop {

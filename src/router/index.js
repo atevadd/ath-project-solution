@@ -15,6 +15,7 @@ const routes = [
     meta: {
       title: "Where in the world - Login",
     },
+    props: true,
   },
   {
     path: "/country/:countryname",
